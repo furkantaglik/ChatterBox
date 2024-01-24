@@ -48,7 +48,7 @@ export default function ChatBox({ targetUser }) {
     return () => {
       socket.off("private message");
     };
-  }, []);
+  }, [targetUser]);
 
   return (
     <section className=" rounded-t-lg bg-gradient-to-br from-blue-900 via-indigo-900 to-purple-800 rounded mx-auto h-[600px] w-full md:w-6/12 mt-10 flex flex-col justify-between relative">
