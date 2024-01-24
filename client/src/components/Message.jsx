@@ -1,12 +1,16 @@
-export default function Message({ message }) {
+export default function Message({ message, img, msWho }) {
   return (
-    <div className="flex items-center gap-x-3 bg-neutral-900 w-fit max-w-prose rounded-md p-1 bg-opacity-30 mb-2">
-      <img
-        src="https://img.clerk.com/eyJ0eXBlIjoicHJveHkiLCJzcmMiOiJodHRwczovL2ltYWdlcy5jbGVyay5kZXYvb2F1dGhfZ2l0aHViL2ltZ18yYk1TNE1UOTZoZVUyTGlWa25QTndWQ2VYelUifQ?width=80"
-        alt=""
-        className="w-[30px] h-[30px] rounded-full"
-      />
-      <span>{message} </span>
+    <div className={`flex items-center mb-2  ${msWho && "justify-end"}`}>
+      {!msWho && (
+        <img src={img} alt="" className="w-[30px] h-[30px] rounded-full" />
+      )}
+      <div
+        className={`flex flex-wrap items-center   ${
+          msWho ? "bg-teal-500" : "bg-purple-700"
+        } w-fit max-w-screen-xs rounded-md p-1 bg-opacity-30  overflow-hidden`}
+      >
+        <p className=" break-all">{message}</p>
+      </div>
     </div>
   );
 }
