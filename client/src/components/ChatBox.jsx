@@ -26,6 +26,19 @@ export default function ChatBox({ targetUser }) {
   };
 
   useEffect(() => {
+    // Sunucuyla bağlantı sağlandığında, belirli bir odaya katıl
+    const roomID = `${user.id}-${targetUser.id}`;
+    socket.emit("join room", roomID);
+
+    // Temizleme işlemi
+    return () => {
+      // Sayfadan ayrıldığında veya bileşen güncellendiğinde odadan ayrıl
+      socket.emit("leave room", roomID);
+      socket.off("private message");
+    };
+  }, [targetUser, user]);
+
+  useEffect(() => {
     socket.on("private message", (content, to, from, image) => {
       setMessages((prevMessages) => [
         ...prevMessages,
@@ -53,6 +66,12 @@ export default function ChatBox({ targetUser }) {
       <section className="relative justify-center items-center w-full md:w-8/12 mx-auto mb-2">
         <input
           value={message}
+          onKeyDown={(e) => {
+            if (e.key === "Enter") {
+              e.preventDefault();
+              sendPrivateMessage();
+            }
+          }}
           onChange={(e) => setMessage(e.target.value)}
           className="p-2 w-full mx-auto rounded-md bg-teal-600 text-white bg-opacity-30 outline-none focus:shadow-lg shadow-teal-500"
           type="text"
