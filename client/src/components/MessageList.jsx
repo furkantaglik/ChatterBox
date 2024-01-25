@@ -10,26 +10,10 @@ export default function MessageList() {
       <div className="flex flex-col gap-y-5 ">
         <MessageCard
           img={
-            "https://img.clerk.com/eyJ0eXBlIjoicHJveHkiLCJzcmMiOiJodHRwczovL2ltYWdlcy5jbGVyay5kZXYvb2F1dGhfZ2l0aHViL2ltZ18yYk1TNE1UOTZoZVUyTGlWa25QTndWQ2VYelUifQ?width=80"
+            "https://cdn1.iconfinder.com/data/icons/ios-11-glyphs/30/people-512.png"
           }
-          username={"furkan Tağlık"}
-          lastMessage={"Merhaba"}
-          notification={3}
-        />
-        <MessageCard
-          img={
-            "https://img.clerk.com/eyJ0eXBlIjoicHJveHkiLCJzcmMiOiJodHRwczovL2ltYWdlcy5jbGVyay5kZXYvb2F1dGhfZ2l0aHViL2ltZ18yYk1TNE1UOTZoZVUyTGlWa25QTndWQ2VYelUifQ?width=80"
-          }
-          username={"furkan Tağlık"}
-          lastMessage={"Merhaba"}
-          notification={3}
-        />
-        <MessageCard
-          img={
-            "https://img.clerk.com/eyJ0eXBlIjoicHJveHkiLCJzcmMiOiJodHRwczovL2ltYWdlcy5jbGVyay5kZXYvb2F1dGhfZ2l0aHViL2ltZ18yYk1TNE1UOTZoZVUyTGlWa25QTndWQ2VYelUifQ?width=80"
-          }
-          username={"furkan Tağlık"}
-          lastMessage={"Merhaba"}
+          username={"Grup Sohbeti"}
+          lastMessage={"Sohbete Başla"}
           notification={3}
         />
       </div>

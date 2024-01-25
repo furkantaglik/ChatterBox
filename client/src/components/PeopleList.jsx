@@ -21,7 +21,7 @@ export default function PeopleList() {
   }, []);
 
   return (
-    <section className=" bg-indigo-950 rounded-md mt-10 p-2 mx-auto w-11/12  md:w-8/12">
+    <section className=" bg-indigo-950 rounded-md mt-10 p-2 mx-auto w-11/12  md:w-8/12 min-h-80">
       <h1 className="text-center mb-5 flex gap-x-4 justify-center items-center  font-semibold  text-xl text-slate-300">
         <IoIosPeople className="text-4xl " /> Kullanıcılar
       </h1>
@@ -38,12 +38,12 @@ export default function PeopleList() {
             />
 
             <h1 className="font-semibold">{user.username}</h1>
-            <Link
+            {/* <Link
               className="w-full bg-blue-900 rounded-md "
               to={`/chat/${user.username}`}
             >
               Sohbet Et
-            </Link>
+            </Link> */}
           </div>
         ))}
       </div>

@@ -3,13 +3,14 @@ export default function CurrentUser({ userData }) {
     <div className="flex justify-between items-center bg-indigo-950 rounded-b-md rounded-tl-lg  mx-auto  cursor-pointer w-full md:w-6/12 ">
       <div className="flex items-center gap-x-3">
         <img
-          src={userData?.imageUrl}
+          src={`https://cdn1.iconfinder.com/data/icons/ios-11-glyphs/30/people-512.png`}
           alt=""
           className="rounded-full w-[50px] h-[50px]"
         />
         <div className="flex flex-col">
           <h1 className="text-lg font-semibold text-white">
-            {userData?.username}
+            {/* {userData?.username} */}
+            Grup Sohbeti
           </h1>
         </div>
       </div>

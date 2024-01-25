@@ -15,8 +15,7 @@ export default function ChatBox({ targetUser }) {
 
   const sendPrivateMessage = () => {
     if (message.trim() === "") return;
-
-    socket.emit("private message", {
+    socket.emit("message", {
       content: message,
       from: user.id,
       image: user.imageUrl,
@@ -24,29 +23,15 @@ export default function ChatBox({ targetUser }) {
     });
     setMessage("");
   };
-
   useEffect(() => {
-    // Sunucuyla bağlantı sağlandığında, belirli bir odaya katıl
-    const roomID = `${user.id}-${targetUser.id}`;
-    socket.emit("join room", roomID);
-
-    // Temizleme işlemi
-    return () => {
-      // Sayfadan ayrıldığında veya bileşen güncellendiğinde odadan ayrıl
-      socket.emit("leave room", roomID);
-      socket.off("private message");
-    };
-  }, [targetUser, user]);
-
-  useEffect(() => {
-    socket.on("private message", (content, to, from, image) => {
+    socket.on("message", (content, to, from, image) => {
       setMessages((prevMessages) => [
         ...prevMessages,
         { content: content, image: image, msWho: from === user.id },
       ]);
     });
     return () => {
-      socket.off("private message");
+      socket.off("message");
     };
   }, [targetUser]);
 
