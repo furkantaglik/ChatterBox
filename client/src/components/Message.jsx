@@ -9,7 +9,7 @@ export default function Message({ message, img, msWho }) {
           msWho ? "bg-teal-500" : "bg-purple-700"
         } w-fit max-w-screen-xs rounded-md p-1 bg-opacity-30  overflow-hidden`}
       >
-        <p className=" break-all">{message}</p>
+        <p className=" break-all min-w-10 text-center">{message}</p>
       </div>
     </div>
   );

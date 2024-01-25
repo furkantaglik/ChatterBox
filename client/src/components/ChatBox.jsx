@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { IoIosSend } from "react-icons/io";
 import { useUser } from "@clerk/clerk-react";
 import CurrentUser from "./CurrentUser";
@@ -12,6 +12,15 @@ export default function ChatBox({ targetUser }) {
   const { user } = useUser();
   const [messages, setMessages] = useState([]);
   const [message, setMessage] = useState("");
+  const chatContainerRef = useRef(null);
+
+  useEffect(() => {
+    scrollToBottom();
+  }, [messages]);
+
+  const scrollToBottom = () => {
+    chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
+  };
 
   const sendPrivateMessage = () => {
     if (message.trim() === "") return;
@@ -38,7 +47,10 @@ export default function ChatBox({ targetUser }) {
   return (
     <section className=" rounded-t-lg bg-gradient-to-br from-blue-900 via-indigo-900 to-purple-800 rounded mx-auto h-[600px] w-full md:w-6/12 mt-10 flex flex-col justify-between relative">
       <CurrentUser userData={targetUser} />
-      <div className="h-screen w-full px-1 overflow-y-auto my-5 text-white font-semibold">
+      <div
+        ref={chatContainerRef}
+        className="h-screen w-full px-1 overflow-y-auto my-5 text-white font-semibold"
+      >
         {messages.map((msg, index) => (
           <Message
             key={index}
