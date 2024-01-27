@@ -1,60 +1,86 @@
 import { useState, useEffect, useRef } from "react";
 import { IoIosSend } from "react-icons/io";
 import { useUser } from "@clerk/clerk-react";
-import CurrentUser from "./CurrentUser";
+import CurrentUser from "./TargetUser";
 import Message from "./Message";
 import io from "socket.io-client";
 
 const url = import.meta.env.VITE_BASE_API_URL;
-const socket = io(`${url}`);
 
 export default function ChatBox({ targetUser }) {
   const { user } = useUser();
+  const [socket, setSocket] = useState(null);
   const [messages, setMessages] = useState([]);
   const [message, setMessage] = useState("");
+  const [onlineStatus, setOnlineStatus] = useState(false);
   const chatContainerRef = useRef(null);
 
+  // Scroll
+  const scrollToBottom = () => {
+    chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
+  };
   useEffect(() => {
     scrollToBottom();
   }, [messages]);
 
-  const scrollToBottom = () => {
-    chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
-  };
-
-  const sendPrivateMessage = () => {
-    if (message.trim() === "") return;
-    socket.emit("message", {
-      content: message,
-      from: user.id,
-      image: user.imageUrl,
-      to: targetUser.id,
-    });
-    setMessage("");
-  };
+  // Socket bağlantısı
   useEffect(() => {
-    socket.on("message", (content, to, from, image) => {
+    const socket = io(url);
+    setSocket(socket);
+    const newUserId = user.id;
+    socket.emit("new-user-add", newUserId);
+
+    return () => socket.disconnect();
+  }, []);
+
+  useEffect(() => {
+    if (!socket) return;
+
+    // Yeni bir kullanıcı ekleyen event
+    socket.on("get-users", (users) => {
+      const isOnline = users.some((u) => u.userId === targetUser.id);
+      setOnlineStatus(isOnline);
+    });
+
+    // Mesajları al
+    socket.on("recieve-message", (data) => {
       setMessages((prevMessages) => [
         ...prevMessages,
-        { content: content, image: image, msWho: from === user.id },
+        {
+          ...data,
+          msWho: user.id !== data.receiverId,
+        },
       ]);
     });
+
     return () => {
-      socket.off("message");
+      socket.off("get-users");
+      socket.off("recieve-message");
     };
-  }, [targetUser]);
+  }, [socket, targetUser.id, user.id]);
+
+  const handleSendMessage = () => {
+    const data = {
+      receiverId: targetUser.id,
+      message: message,
+      msWho: user.id,
+      image: user.imageUrl,
+    };
+    socket.emit("send-message", data);
+    setMessages((prevMessages) => [...prevMessages, { ...data }]);
+  };
 
   return (
-    <section className=" rounded-t-lg bg-gradient-to-br from-blue-900 via-indigo-900 to-purple-800 rounded mx-auto h-[600px] w-full md:w-6/12 mt-10 flex flex-col justify-between relative">
-      <CurrentUser userData={targetUser} />
+    <section className="rounded-t-lg bg-gradient-to-br from-blue-900 via-indigo-900 to-purple-800 rounded mx-auto h-[600px] w-full md:w-6/12 mt-10 flex flex-col justify-between relative">
+      <CurrentUser userData={targetUser} onlineStatus={onlineStatus} />
       <div
         ref={chatContainerRef}
         className="h-screen w-full px-1 overflow-y-auto my-5 text-white font-semibold"
       >
-        {messages.map((msg, index) => (
+        {messages?.map((msg, index) => (
           <Message
             key={index}
-            message={msg.content}
+            message={msg.message}
             img={msg.image}
             msWho={msg.msWho}
           />
@@ -66,7 +92,7 @@ export default function ChatBox({ targetUser }) {
           onKeyDown={(e) => {
             if (e.key === "Enter") {
               e.preventDefault();
-              sendPrivateMessage();
+              handleSendMessage();
             }
           }}
           onChange={(e) => setMessage(e.target.value)}
@@ -74,9 +100,10 @@ export default function ChatBox({ targetUser }) {
           type="text"
           placeholder="Mesaj Gönder.."
         />
-        <button onClick={sendPrivateMessage}>
+        <button onClick={handleSendMessage}>
           <IoIosSend className="absolute bottom-2 right-2 text-2xl text-white" />
         </button>
+        {onlineStatus && <span>Çevrimiçi</span>}
       </section>
     </section>
   );

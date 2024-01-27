@@ -38,12 +38,12 @@ export default function PeopleList() {
             />
 
             <h1 className="font-semibold">{user.username}</h1>
-            {/* <Link
+            <Link
               className="w-full bg-blue-900 rounded-md "
               to={`/chat/${user.username}`}
             >
               Sohbet Et
-            </Link> */}
+            </Link>
           </div>
         ))}
       </div>

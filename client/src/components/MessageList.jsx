@@ -12,7 +12,7 @@ export default function MessageList() {
           img={
             "https://cdn1.iconfinder.com/data/icons/ios-11-glyphs/30/people-512.png"
           }
-          username={"Grup Sohbeti"}
+          username={"furkantaglik"}
           lastMessage={"Sohbete Başla"}
           notification={3}
         />
